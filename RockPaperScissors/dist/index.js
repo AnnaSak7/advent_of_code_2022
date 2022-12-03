@@ -2520,8 +2520,32 @@ var ToolPoint;
     ToolPoint[ToolPoint["Y"] = 2] = "Y";
     ToolPoint[ToolPoint["Z"] = 3] = "Z";
 })(ToolPoint || (ToolPoint = {}));
+var ToolPoint2;
+(function (ToolPoint2) {
+    ToolPoint2[ToolPoint2["A"] = 0] = "A";
+    ToolPoint2[ToolPoint2["B"] = 1] = "B";
+    ToolPoint2[ToolPoint2["C"] = 2] = "C";
+})(ToolPoint2 || (ToolPoint2 = {}));
+var XYZGamePoints;
+(function (XYZGamePoints) {
+    XYZGamePoints[XYZGamePoints["X"] = 0] = "X";
+    XYZGamePoints[XYZGamePoints["Y"] = 3] = "Y";
+    XYZGamePoints[XYZGamePoints["Z"] = 6] = "Z";
+})(XYZGamePoints || (XYZGamePoints = {}));
+function getWinningOppositeTool(tool) {
+    return tool == "A" ? 2 : tool === "B" ? 3 : 1;
+}
+function getLosingOppositeTool(tool) {
+    return tool == "A" ? 3 : tool === "B" ? 1 : 2;
+}
+function getXYZGamePoints(str) {
+    return str === "X" ? 0 : str === "Y" ? 3 : 6;
+}
 function getToolPoint(xyz) {
     return xyz === "X" ? ToolPoint.X : xyz === "Y" ? ToolPoint.Y : ToolPoint.Z;
+}
+function getToolPoint2(abc) {
+    return abc === "A" ? 1 : abc === "B" ? 2 : 3;
 }
 function winDrawLose(set) {
     if ((set[0] === "A" && set[1] === "X") ||
@@ -2538,21 +2562,67 @@ function winDrawLose(set) {
         return 0;
     }
 }
-function totalPoints(data) {
-    let pointsArr = [];
-    data.map((set) => {
-        let janken = winDrawLose(set);
-        let toolPoint = getToolPoint(set[1]);
-        pointsArr.push(janken + toolPoint);
-    });
-    console.log("sum : ", pointsArr.reduce((a, b) => a + b));
-    return pointsArr.reduce((a, b) => a + b);
-}
+// function totalPoints(data: string[][]): number {
+//   let pointsArr: number[] = [];
+//   data.map((set: string[]) => {
+//     let janken: number = winDrawLose(set);
+//     let toolPoint: number = getToolPoint(set[1]);
+//     pointsArr.push(janken + toolPoint);
+//   });
+//   console.log(
+//     "sum : ",
+//     pointsArr.reduce((a, b) => a + b)
+//   );
+//   return pointsArr.reduce((a, b) => a + b);
+// }
+// function goWithPlan(data: string[][]): number {
+//   let pointsArr: number[] = [];
+//   let toolPoint: number = 0;
+//   data.map((set: string[]) => {
+//     let gamePoint: number = getXYZGamePoints(set[1]);
+//     if (set[1] === "Y") {
+//       toolPoint = getToolPoint2(set[0]);
+//     }
+//     if (set[1] === "Z") {
+//       toolPoint = getWinningOppositeTool(set[1]);
+//     }
+//     if (set[1] === "X") {
+//       toolPoint = getLosingOppositeTool(set[0]);
+//     }
+//     console.log("toolPoint and gamePoint : ", toolPoint + gamePoint);
+//     pointsArr.push(gamePoint + toolPoint);
+//   });
+//   console.log(
+//     "sum2 : ",
+//     pointsArr.reduce((a, b) => a + b)
+//   );
+//   return pointsArr.reduce((a, b) => a + b);
+// }
 const arrData = getArrayOfArrays(data00);
-const sum = totalPoints(arrData);
-// A - X = 1 rock
-// B - Y = 2 paper
-// C - Z = 3 scissors
-// lose = 0
-// draw = 3
-// win = 6
+// const sum = totalPoints(arrData);
+// goWithPlan(arrData);
+const theSet = {
+    3: "AX",
+    4: "AY",
+    8: "AZ",
+    1: "BX",
+    5: "BY",
+    9: "BZ",
+    2: "CX",
+    6: "CY",
+    7: "CZ",
+};
+function getKeyByValue(object, value) {
+    return Object.keys(object).find((key) => object[key] === value);
+}
+function goWithPlan2(set) {
+    let pointsArr = [];
+    set.map((one) => {
+        let oneString = one.join("");
+        let total = getKeyByValue(theSet, oneString);
+        pointsArr.push(total);
+    });
+    console.log("sum3 : ", pointsArr.reduce((a, b) => +a + +b));
+    return pointsArr.reduce((a, b) => +a + +b);
+}
+goWithPlan2(arrData);
