@@ -74,12 +74,6 @@ function findSharedLetter(set: string[][]): string {
   return sameLetter;
 }
 
-// function findPriority(obj: {}, value: string): number {
-//   const priorityNum: number = Object.keys(obj).find((key) => {
-//     obj[key] === value;
-//   });
-//   return priorityNum;
-// }
 function rucksackReorganizer(input: string): number {
   let sum: number = 0;
   const arrayOfRucksack: string[] = input.split("\n");
@@ -91,8 +85,70 @@ function rucksackReorganizer(input: string): number {
     let point: any = Object.values(priorities)[index];
     sum += point;
   });
-  console.log("sum ", sum);
   return sum;
 }
 
-rucksackReorganizer(input);
+console.log("part 1", rucksackReorganizer(input));
+
+//========part 2 ============
+
+function separateIntoGroupRucksacks(arr: string[]): string[][] {
+  const perGroup = 3;
+
+  const result = arr.reduce(
+    (resultArray: string[][], item: string, index: number): string[][] => {
+      const groupIndex = Math.floor(index / perGroup);
+
+      if (!resultArray[groupIndex]) {
+        resultArray[groupIndex] = []; // start a new group
+      }
+
+      resultArray[groupIndex].push(item);
+
+      return resultArray;
+    },
+    []
+  );
+
+  return result;
+}
+
+function findBadge(group: string[]): string {
+  let first: string[] = group[0].split("");
+  let second: string[] = group[1].split("");
+  let third: string[] = group[2].split("");
+
+  let sameLetter: string[] = [];
+  first.find((letter: string) => {
+    for (let i = 0; i < second.length; i++) {
+      if (second[i] === letter) {
+        sameLetter.push(letter);
+      }
+    }
+  });
+
+  let badge: any = third.find((letter: string) => {
+    for (let i = 0; i < sameLetter.length; i++) {
+      if (sameLetter[i] === letter) {
+        return letter;
+      }
+    }
+  });
+  return badge;
+}
+
+function groupRucksackOrganizer(data: string) {
+  let sum: number = 0;
+  const arrayOfRucksack = data.split("\n");
+  const arrayOfArrays: string[][] = separateIntoGroupRucksacks(arrayOfRucksack);
+  arrayOfArrays.map((group: string[]) => {
+    let badge = findBadge(group);
+    let keys: string[] = Object.keys(priorities);
+    let index: number = keys.indexOf(badge);
+    let point: any = Object.values(priorities)[index];
+    sum += point;
+  });
+  return sum;
+}
+
+console.log("part 2", groupRucksackOrganizer(input));

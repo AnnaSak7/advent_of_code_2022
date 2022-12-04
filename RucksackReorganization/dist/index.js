@@ -72,12 +72,6 @@ function findSharedLetter(set) {
     });
     return sameLetter;
 }
-// function findPriority(obj: {}, value: string): number {
-//   const priorityNum: number = Object.keys(obj).find((key) => {
-//     obj[key] === value;
-//   });
-//   return priorityNum;
-// }
 function rucksackReorganizer(input) {
     let sum = 0;
     const arrayOfRucksack = input.split("\n");
@@ -89,7 +83,54 @@ function rucksackReorganizer(input) {
         let point = Object.values(priorities)[index];
         sum += point;
     });
-    console.log("sum ", sum);
     return sum;
 }
-rucksackReorganizer(data_1.input);
+console.log("part 1", rucksackReorganizer(data_1.input));
+//========part 2 ============
+function separateIntoGroupRucksacks(arr) {
+    const perGroup = 3;
+    const result = arr.reduce((resultArray, item, index) => {
+        const groupIndex = Math.floor(index / perGroup);
+        if (!resultArray[groupIndex]) {
+            resultArray[groupIndex] = []; // start a new group
+        }
+        resultArray[groupIndex].push(item);
+        return resultArray;
+    }, []);
+    return result;
+}
+function findBadge(group) {
+    let first = group[0].split("");
+    let second = group[1].split("");
+    let third = group[2].split("");
+    let sameLetter = [];
+    first.find((letter) => {
+        for (let i = 0; i < second.length; i++) {
+            if (second[i] === letter) {
+                sameLetter.push(letter);
+            }
+        }
+    });
+    let badge = third.find((letter) => {
+        for (let i = 0; i < sameLetter.length; i++) {
+            if (sameLetter[i] === letter) {
+                return letter;
+            }
+        }
+    });
+    return badge;
+}
+function groupRucksackOrganizer(data) {
+    let sum = 0;
+    const arrayOfRucksack = data.split("\n");
+    const arrayOfArrays = separateIntoGroupRucksacks(arrayOfRucksack);
+    arrayOfArrays.map((group) => {
+        let badge = findBadge(group);
+        let keys = Object.keys(priorities);
+        let index = keys.indexOf(badge);
+        let point = Object.values(priorities)[index];
+        sum += point;
+    });
+    return sum;
+}
+console.log("part 2", groupRucksackOrganizer(data_1.input));
