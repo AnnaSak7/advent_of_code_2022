@@ -2623,7 +2623,7 @@ const theSet = {
   7: "CZ",
 };
 
-function getKeyByValue(object: {}, value: string) {
+function getKeyByValue(object: any, value: string) {
   return Object.keys(object).find((key: string) => object[key] === value);
 }
 
@@ -2631,7 +2631,7 @@ function goWithPlan2(set: string[][]): number {
   let pointsArr: number[] = [];
   set.map((one: string[]) => {
     let oneString = one.join("");
-    let total: number = getKeyByValue(theSet, oneString);
+    let total: any = getKeyByValue(theSet, oneString);
     pointsArr.push(total);
   });
 
