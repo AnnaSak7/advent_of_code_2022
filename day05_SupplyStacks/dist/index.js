@@ -9,10 +9,17 @@ function rearrangementIntoArray(str) {
         let oneSetNum = oneSet.map((item) => +item);
         resultArray.push(oneSetNum);
     });
-    console.log("array", resultArray);
     return resultArray;
 }
 const arrangements = rearrangementIntoArray(data_1.rearrangement);
+function topOfEachStack(stack) {
+    const containers = [];
+    stack.map((stack) => {
+        let one = stack.pop();
+        containers.push(one);
+    });
+    return containers.join("");
+}
 function rearrangeCrates(crates, arrangements) {
     for (let i = 0; i < arrangements.length; i++) {
         let fromCrate = crates[arrangements[i][1] - 1];
@@ -22,7 +29,21 @@ function rearrangeCrates(crates, arrangements) {
             toCrate.push(crate);
         }
     }
-    console.log("crates ", crates);
-    return crates;
+    console.log("crates ", topOfEachStack(crates));
+    return topOfEachStack(crates);
 }
 rearrangeCrates(data_1.crates, arrangements);
+// =================part 2====================
+function rearrangeCrates2(crates, arrangements) {
+    for (let i = 0; i < arrangements.length; i++) {
+        let numberOfCrates = arrangements[i][0];
+        let fromCrate = crates[arrangements[i][1] - 1];
+        let toCrate = crates[arrangements[i][2] - 1];
+        let containers = fromCrate.slice(numberOfCrates * -1);
+        fromCrate.splice(fromCrate.length - numberOfCrates, numberOfCrates);
+        containers.map((letter) => toCrate.push(letter));
+    }
+    console.log("crates2 ", topOfEachStack(crates));
+    return topOfEachStack(crates);
+}
+rearrangeCrates2(data_1.crates, arrangements);
