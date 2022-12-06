@@ -17,3 +17,20 @@ function findMarker(data) {
     return index + 4;
 }
 findMarker(data_1.datastream);
+//=======Part 2===========
+function findMarker14(data) {
+    let index = 0;
+    for (let i = 0; i < data.length; i++) {
+        let array = data.split("");
+        let fourLetters = array.slice(i, i + 15);
+        let hasDuplicate = fourLetters.some((element, index) => fourLetters.indexOf(element) !== index);
+        if (!hasDuplicate) {
+            index = i;
+            break;
+        }
+    }
+    console.log("length2 ", data_1.datastream.length);
+    console.log("marker2", index + 14);
+    return index + 14;
+}
+findMarker14(data_1.datastream);
