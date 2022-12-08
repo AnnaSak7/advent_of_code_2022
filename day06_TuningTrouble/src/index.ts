@@ -4,9 +4,14 @@ function findMarker(data: string): number {
   let index: number = 0;
   for (let i = 0; i < data.length; i++) {
     let array = data.split("");
-    let fourLetters = array.slice(i, i + 5);
+    let fourLetters = array.slice(i, i + 4);
     let hasDuplicate = fourLetters.some(
       (val, i) => fourLetters.indexOf(val) !== i
+      //[a, b, c, a]
+      // (a, 0)
+      //(b, 1)
+      //(c, 2)
+      //(a, 3)
     );
     if (!hasDuplicate) {
       index = i;
@@ -25,7 +30,7 @@ function findMarker14(data: string): number {
   let index: number = 0;
   for (let i = 0; i < data.length; i++) {
     let array = data.split("");
-    let fourLetters = array.slice(i, i + 15);
+    let fourLetters = array.slice(i, i + 14);
     let hasDuplicate = fourLetters.some(
       (element, index) => fourLetters.indexOf(element) !== index
     );
