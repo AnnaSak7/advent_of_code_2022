@@ -1,0 +1,11 @@
+{
+  "name": "day10_cathoderaytubesrc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node dist/index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
