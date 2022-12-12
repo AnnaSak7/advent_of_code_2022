@@ -1,4 +1,7 @@
-export const signal: string = `addx 1
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.signal = void 0;
+exports.signal = `addx 1
 addx 4
 addx 1
 noop
