@@ -33,10 +33,8 @@ function isTouching(
   currentTailPosition: number[]
 ): boolean {
   return (
-    headPosition[0] - currentTailPosition[0] < 2 &&
-    headPosition[1] - currentTailPosition[1] < 2 &&
-    currentTailPosition[0] - headPosition[0] < 2 &&
-    currentTailPosition[1] - headPosition[1] < 2
+    Math.abs(headPosition[0] - currentTailPosition[0]) < 2 &&
+    Math.abs(headPosition[1] - currentTailPosition[1]) < 2
   );
 }
 
@@ -136,17 +134,55 @@ const followCommands = (data: string[][]) => {
   return resultArray;
 };
 
-console.log("array ", dataArray2);
-const result = followCommands(dataArray2);
-const join = result.map((item) => item.join(""));
+const followersMove = (one: number[], two: number) => {};
 
-// const unique = result.filter((x, i, a) => a.indexOf(x) == i);
-console.log("result # ", result);
-const unique = join.filter((item, index) => {
-  return join.indexOf(item) === index;
-});
-console.log("uni", unique.length);
-/*===================================================================================*/
+interface Obj {
+  [key: number]: number[];
+}
+
+const commandsForTenKnots = (data: string[][]) => {
+  let obj: Obj = {
+    0: [0, 0],
+    1: [0, 0],
+    2: [0, 0],
+    3: [0, 0],
+    4: [0, 0],
+    5: [0, 0],
+    6: [0, 0],
+    7: [0, 0],
+    8: [0, 0],
+    9: [0, 0],
+  };
+  let resultArray = new Set();
+  data.map((set) => {
+    for (let i = 0; i < +set[1]; i++) {
+      for (let k = 0; k <= 8; k++) {
+        if (k === 0) {
+          let trackingArray = headCommands(set, obj[k], obj[k + 1]);
+          obj[k] = trackingArray[0];
+          obj[k + 1] = trackingArray[1];
+        } else {
+          let newTail = tailMovement(obj[k], obj[k + 1]);
+          obj[k + 1] = newTail;
+        }
+        resultArray.add(obj[9]);
+      }
+    }
+  });
+  return resultArray;
+};
+
+// const result = followCommands(dataArray2);
+// const join = result.map((position) => position.join("join"));
+// const unique = join.filter((value, index) => {
+//   return join.indexOf(value) === index;
+// });
+// console.log("unique", unique);
+// console.log("unique length", unique.length);
+
+const result = commandsForTenKnots(dataArray);
+console.log("result ", result);
+console.log("result # ", result.size);
 
 //Rope Bridge
 //Get the commands for the head movement ==O
