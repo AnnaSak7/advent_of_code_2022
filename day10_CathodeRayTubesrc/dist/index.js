@@ -38,3 +38,15 @@ const signalStrength = (data, cycles) => {
     return total;
 };
 signalStrength(data, cycles);
+const createScreen = () => {
+    const array = [];
+    while (array.length < 6) {
+        let newArr = new Array(39);
+        array.push(newArr);
+    }
+    return array;
+};
+console.log("create ", createScreen());
+const spritePosition = () => {
+    // const CRT = createScreen()
+};
