@@ -39,7 +39,11 @@ function tailMovement(
   headPosition: number[],
   currentTailPosition: number[]
 ): number[] {
-  let tailNewPosition: number[] = currentTailPosition;
+  let tailNewPosition: number[] = [
+    currentTailPosition[0],
+    currentTailPosition[1],
+  ];
+
   if (!isTouching(headPosition, currentTailPosition)) {
     let xBigger = headPosition[0] > currentTailPosition[0];
     let xSmaller = headPosition[0] < currentTailPosition[0];
@@ -62,8 +66,80 @@ function tailMovement(
 
   return tailNewPosition;
 }
+console.log("tail new", tailMovement([2, 1], [4, 1]));
 
-// console.log("tails current position ", tailMovement([3, 5], [2, 3]));
+function tailMovement1(
+  headPosition: number[],
+  currentTailPosition: number[]
+): number[] {
+  let isVerticalAligned = headPosition[0] === currentTailPosition[0];
+  let isHorizontalAligned = headPosition[1] === currentTailPosition[1];
+
+  let isHeadSmaller =
+    headPosition[0] < currentTailPosition[0] ||
+    headPosition[1] < currentTailPosition[1];
+
+  let tailNewPosition: number[] = [];
+  if (!isHeadSmaller) {
+    if (!isTouching(headPosition, currentTailPosition) && isVerticalAligned) {
+      tailNewPosition[0] = currentTailPosition[0];
+      tailNewPosition[1] = currentTailPosition[1] + 1;
+    }
+    if (!isTouching(headPosition, currentTailPosition) && isHorizontalAligned) {
+      tailNewPosition[1] = currentTailPosition[1];
+      tailNewPosition[0] = currentTailPosition[0] + 1;
+    }
+  } else {
+    if (!isTouching(headPosition, currentTailPosition) && isVerticalAligned) {
+      tailNewPosition[0] = currentTailPosition[0];
+      tailNewPosition[1] = currentTailPosition[1] - 1;
+    }
+    if (!isTouching(headPosition, currentTailPosition) && isHorizontalAligned) {
+      tailNewPosition[1] = currentTailPosition[1];
+      tailNewPosition[0] = currentTailPosition[0] - 1;
+    }
+  }
+
+  if (
+    !isTouching(headPosition, currentTailPosition) &&
+    !isVerticalAligned &&
+    !isHorizontalAligned
+  ) {
+    // [2, 1]    [0, 0]  => [1, 1]
+    if (
+      headPosition[0] > currentTailPosition[0] &&
+      headPosition[1] > currentTailPosition[1]
+    ) {
+      tailNewPosition[0] = currentTailPosition[0] + 1;
+      tailNewPosition[1] = currentTailPosition[1] + 1;
+    }
+    if (
+      headPosition[0] > currentTailPosition[0] &&
+      headPosition[1] < currentTailPosition[1]
+    ) {
+      tailNewPosition[0] = currentTailPosition[0] + 1;
+      tailNewPosition[1] = currentTailPosition[1] - 1;
+    }
+    if (
+      headPosition[0] < currentTailPosition[0] &&
+      headPosition[1] < currentTailPosition[1]
+    ) {
+      tailNewPosition[0] = currentTailPosition[0] - 1;
+      tailNewPosition[1] = currentTailPosition[1] - 1;
+    }
+    if (
+      headPosition[0] < currentTailPosition[0] &&
+      headPosition[1] > currentTailPosition[1]
+    ) {
+      tailNewPosition[0] = currentTailPosition[0] - 1;
+      tailNewPosition[1] = currentTailPosition[1] + 1;
+    }
+    // [3, 5]    [2, 3] =>  [3, 4]
+  }
+  return tailNewPosition.length === 0 ? currentTailPosition : tailNewPosition;
+}
+
+console.log("tails current position ", tailMovement1([3, 5], [2, 3]));
 
 //If tail is same position or same -1 === is touching
 //If tailPosition[0][1] === headPosition[0][1] <> than 2 === not touching
@@ -117,15 +193,49 @@ const commandsForTenKnots = (data: string[][]) => {
           let newTail = tailMovement(obj[k], obj[k + 1]);
           obj[k + 1] = newTail;
         }
+        resultArray.add(obj[9].join("/"));
+      }
+    }
+  });
+  return resultArray;
+};
+
+const commandsForTenKnots1 = (data: string[][]) => {
+  let obj: Obj = {
+    0: [0, 0],
+    1: [0, 0],
+    2: [0, 0],
+    3: [0, 0],
+    4: [0, 0],
+    5: [0, 0],
+    6: [0, 0],
+    7: [0, 0],
+    8: [0, 0],
+    9: [0, 0],
+  };
+  let resultArray = new Set();
+  data.map((set) => {
+    for (let i = 0; i < +set[1]; i++) {
+      for (let k = 0; k <= 8; k++) {
+        if (k === 0) {
+          let trackingArray = headCommands(set, obj[k], obj[k + 1]);
+          obj[k] = trackingArray[0];
+          obj[k + 1] = trackingArray[1];
+        } else {
+          let newTail = tailMovement1(obj[k], obj[k + 1]);
+          obj[k + 1] = newTail;
+        }
         resultArray.add(obj[9]);
       }
     }
   });
-  console.log("rrrrr", resultArray);
   return resultArray;
 };
+// const result1 = commandsForTenKnots1(dataArray);
+// console.log("result 1", result1);
+// console.log("result 1 # ", result1.size);
 
-const result = commandsForTenKnots(dataArray);
+const result = commandsForTenKnots(dataArray2);
 console.log("result ", result);
 console.log("result # ", result.size);
 
