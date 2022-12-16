@@ -1,3 +1,4 @@
+import { dir } from "console";
 import { data } from "./data";
 
 const data00 = data.split("\n");
@@ -75,3 +76,48 @@ console.log("indexOfEachCdDir ", indexOfEachCdDir);
 // console.log("numbers ", third);
 
 // // console.log("array : ", arrayOfArray);
+
+let main = {
+  dscbfp: {
+    fgtvzpl: {
+      fvrghzfg: {
+        // < 100,000
+        "cjb.nwg": 212295,
+        ftqs: {
+          // < 100,000
+          mmhtpz: 250415,
+        },
+      },
+      "lbbg.rhq": 28513,
+    },
+    hgfrgbv: {},
+    hmwqgjnl: {},
+    jvr: {},
+    lcvdgm: {},
+    mmhtpz: {},
+  },
+  fsdfddfv: 283653,
+  mjzqq: {},
+  "rcm.psp": 241330,
+  sjbpgc: {},
+  zfsbvs: {},
+};
+
+// key
+//  value is number? === file
+//  value is object? === directory
+
+// sum(result, dir key, dirTree){
+//   key is file?
+//     result[dir] += (size + sum())
+
+//   key is directory?
+//     result[key] = sum()
+// }
+
+// {dir: size}
+
+// recursive function that goes through a list without using for loop
+// don't forget to break the recursive
+
+//const sumValues = obj => Object.values(obj).reduce((a, b) => a + b, 0);
