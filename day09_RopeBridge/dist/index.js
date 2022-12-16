@@ -8,20 +8,17 @@ function headCommands(set, headPosition, currentTailPosition) {
     //["R", 2]
     if (set[0] === "R") {
         headPosition[0] += 1;
-        currentTailPosition = tailMovement(headPosition, currentTailPosition);
     }
     else if (set[0] === "L") {
         headPosition[0] -= 1;
-        currentTailPosition = tailMovement(headPosition, currentTailPosition);
     }
     else if (set[0] === "U") {
         headPosition[1] += 1;
-        currentTailPosition = tailMovement(headPosition, currentTailPosition);
     }
     else if (set[0] === "D") {
         headPosition[1] -= 1;
-        currentTailPosition = tailMovement(headPosition, currentTailPosition);
     }
+    currentTailPosition = tailMovement(headPosition, currentTailPosition);
     resultArray.push(headPosition);
     resultArray.push(currentTailPosition);
     return resultArray;
@@ -31,58 +28,26 @@ function isTouching(headPosition, currentTailPosition) {
         Math.abs(headPosition[1] - currentTailPosition[1]) < 2);
 }
 function tailMovement(headPosition, currentTailPosition) {
-    let isVerticalAligned = headPosition[0] === currentTailPosition[0];
-    let isHorizontalAligned = headPosition[1] === currentTailPosition[1];
-    let isHeadSmaller = headPosition[0] < currentTailPosition[0] ||
-        headPosition[1] < currentTailPosition[1];
-    let tailNewPosition = [];
-    if (!isHeadSmaller) {
-        if (!isTouching(headPosition, currentTailPosition) && isVerticalAligned) {
-            tailNewPosition[0] = currentTailPosition[0];
-            tailNewPosition[1] = currentTailPosition[1] + 1;
-        }
-        if (!isTouching(headPosition, currentTailPosition) && isHorizontalAligned) {
-            tailNewPosition[1] = currentTailPosition[1];
+    let tailNewPosition = currentTailPosition;
+    if (!isTouching(headPosition, currentTailPosition)) {
+        let xBigger = headPosition[0] > currentTailPosition[0];
+        let xSmaller = headPosition[0] < currentTailPosition[0];
+        let yBigger = headPosition[1] > currentTailPosition[1];
+        let ySmaller = headPosition[1] < currentTailPosition[1];
+        if (xBigger) {
             tailNewPosition[0] = currentTailPosition[0] + 1;
         }
-    }
-    else {
-        if (!isTouching(headPosition, currentTailPosition) && isVerticalAligned) {
-            tailNewPosition[0] = currentTailPosition[0];
-            tailNewPosition[1] = currentTailPosition[1] - 1;
-        }
-        if (!isTouching(headPosition, currentTailPosition) && isHorizontalAligned) {
-            tailNewPosition[1] = currentTailPosition[1];
+        if (xSmaller) {
             tailNewPosition[0] = currentTailPosition[0] - 1;
         }
-    }
-    if (!isTouching(headPosition, currentTailPosition) &&
-        !isVerticalAligned &&
-        !isHorizontalAligned) {
-        // [2, 1]    [0, 0]  => [1, 1]
-        if (headPosition[0] > currentTailPosition[0] &&
-            headPosition[1] > currentTailPosition[1]) {
-            tailNewPosition[0] = currentTailPosition[0] + 1;
+        if (yBigger) {
             tailNewPosition[1] = currentTailPosition[1] + 1;
         }
-        if (headPosition[0] > currentTailPosition[0] &&
-            headPosition[1] < currentTailPosition[1]) {
-            tailNewPosition[0] = currentTailPosition[0] + 1;
+        if (ySmaller) {
             tailNewPosition[1] = currentTailPosition[1] - 1;
         }
-        if (headPosition[0] < currentTailPosition[0] &&
-            headPosition[1] < currentTailPosition[1]) {
-            tailNewPosition[0] = currentTailPosition[0] - 1;
-            tailNewPosition[1] = currentTailPosition[1] - 1;
-        }
-        if (headPosition[0] < currentTailPosition[0] &&
-            headPosition[1] > currentTailPosition[1]) {
-            tailNewPosition[0] = currentTailPosition[0] - 1;
-            tailNewPosition[1] = currentTailPosition[1] + 1;
-        }
-        // [3, 5]    [2, 3] =>  [3, 4]
     }
-    return tailNewPosition.length === 0 ? currentTailPosition : tailNewPosition;
+    return tailNewPosition;
 }
 // console.log("tails current position ", tailMovement([3, 5], [2, 3]));
 //If tail is same position or same -1 === is touching
@@ -104,7 +69,6 @@ const followCommands = (data) => {
     }
     return resultArray;
 };
-const followersMove = (one, two) => { };
 const commandsForTenKnots = (data) => {
     let obj = {
         0: [0, 0],
@@ -135,18 +99,19 @@ const commandsForTenKnots = (data) => {
             }
         }
     });
+    console.log("rrrrr", resultArray);
     return resultArray;
 };
-// const result = followCommands(dataArray2);
+const result = commandsForTenKnots(dataArray);
+console.log("result ", result);
+console.log("result # ", result.size);
+// const result = followCommands(dataArray);
 // const join = result.map((position) => position.join("join"));
 // const unique = join.filter((value, index) => {
 //   return join.indexOf(value) === index;
 // });
 // console.log("unique", unique);
 // console.log("unique length", unique.length);
-const result = commandsForTenKnots(dataArray);
-console.log("result ", result);
-console.log("result # ", result.size);
 //Rope Bridge
 //Get the commands for the head movement ==O
 //Define how the head gets to the position ==X
