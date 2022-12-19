@@ -222,36 +222,54 @@ let main = {
 //   if (rest.length == 0 && obj.hasOwnProperty(level)) return true;
 //   return checkNested(obj[level], ...rest);
 // }
+const py = (data: string): number => {
+  const commands = data.split("\n");
+  console.log("commands ", commands);
 
-const commands = data.split("\n");
-console.log("commands ", commands);
+  let path = "/";
+  let dirs: any = { "/home": 0 };
 
-let path = "/";
-let dirs = { "/home": 0 };
+  for (let command of commands) {
+    // Commands that start with $
+    if (command[0] === "$") {
+      // Do nothing when listing
+      if (command.slice(2, 4) === "cd") {
+        if (command.includes("/")) {
+          path = "/home";
+        } else if (command.includes("..")) {
+          path = path[path.lastIndexOf("/")];
+        } else {
+          let dir_name = command.slice(4);
+          path = path + "/" + dir_name;
+          Object.assign(dirs, { path: 0 });
+        }
+      }
+    } else if (command.slice(0, 3) !== "dir") {
+      console.log("command ", command);
+      let size = +command.slice(0, command.indexOf(" "));
+      let dir = path;
+      console.log("path ", path);
+      let count = (path.match(new RegExp("/")) || []).length;
 
-for (let command in commands) {
-  // Commands that start with $
-  if (command[0] === "$") {
-    // Do nothing when listing
-    if (command.includes("ls")) {
-      //pass
-    } else if (command.includes("cd")) {
-      if (command.includes("/")) {
-        path = ".home";
-      } else if (command.includes("..")) {
-        path = path[path.lastIndexOf("/")];
-      } else {
-        let dir_name = command.slice(5);
-        path = path + "/" + dir_name;
-        Object.assign(dirs, { path: 0 });
+      console.log("size ", size);
+      for (let i = 0; i < count; i++) {
+        console.log("dirs[]", dir);
+        dirs[`${dir}`] += size;
+        dir = dir[dir.lastIndexOf("/")];
       }
     }
-  } else if (command.slice(0, 3) === "dir") {
-    //pass
-  } else {
-    let size = +command.substring(0, command.indexOf(" "));
-    let dir = path;
-    let count = (path.match(new RegExp("/")) || []).length;
-    for (let i = 0; i < count; i++) {}
   }
-}
+
+  let total: number = 0;
+
+  for (let dir in dirs) {
+    if (dirs[dir] <= 100000) {
+      total += dirs[dir];
+    }
+  }
+
+  console.log({ total });
+  return total;
+};
+
+console.log("py ", py(data));
